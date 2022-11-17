@@ -45,8 +45,8 @@ namespace CheatSheetProject.Repositories
                 string id = sqlite_datareader.GetString(0);
                 string name = sqlite_datareader.GetString(1);
                 string codeSnippet = sqlite_datareader.GetString(2);
-                string additionalInfo = sqlite_datareader.GetString(3);
-                allCheatSheetItems.Add(new CheatSheetItem
+                string additionalInfo = sqlite_datareader.GetString(4);
+                allCheatSheetItems.Add(new CheatSheetItem 
                 {
                     Id = id,
                     Name = name,
@@ -69,7 +69,7 @@ namespace CheatSheetProject.Repositories
             {
                 string name = sqlite_datareader.GetString(1);
                 string codeSnippet = sqlite_datareader.GetString(2);
-                string additionalInfo = sqlite_datareader.GetString(3);
+                string additionalInfo = sqlite_datareader.GetString(4);
 
                 SQLTableManagement.CloseConnections(sqlite_datareader);
                 return new CheatSheetItem
@@ -94,7 +94,7 @@ namespace CheatSheetProject.Repositories
                 string id = sqlite_datareader.GetString(0);
                 string name = sqlite_datareader.GetString(1);
                 string codeSnippet = sqlite_datareader.GetString(2);
-                string additionalInfo = sqlite_datareader.GetString(3);
+                string additionalInfo = sqlite_datareader.GetString(4);
                 allCheatSheetItemsForTopic.Add(new CheatSheetItem
                 {
                     Id = id,

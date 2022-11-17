@@ -8,7 +8,7 @@ namespace CheatSheetProject.Models
         public List<CheatSheetItem> CheatSheetItem { get; set; }
         public Topic()
         {
-
+            CheatSheetItem = new List<CheatSheetItem>();
         }
 
     }

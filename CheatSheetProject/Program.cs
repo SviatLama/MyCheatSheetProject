@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Security.Cryptography;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -27,35 +29,47 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-//CheatSheetProject.Repositories.Migrations.run();
-//CheatSheetProject.Repositories.TopicRepository.AddNewTopic("For loop");
-//CheatSheetProject.Repositories.TopicRepository.AddNewTopic("if statement");
-//CheatSheetProject.Repositories.TopicRepository.AddNewTopic("while");
-/*var topics = CheatSheetProject.Repositories.TopicRepository.GetAllTopics();
+/*
+ * CheatSheetProject.Repositories.Migrations.run();
+CheatSheetProject.Repositories.TopicRepository.AddNewTopic("For loop");
+CheatSheetProject.Repositories.TopicRepository.AddNewTopic("if statement");
+CheatSheetProject.Repositories.TopicRepository.AddNewTopic("while");
+var topics = CheatSheetProject.Repositories.TopicRepository.GetAllTopics();
 var firstTopic = CheatSheetProject.Repositories.TopicRepository.GetTopic(topics[0].Id);
-
 Console.WriteLine(firstTopic);
-
 if (firstTopic != null)
 {
     CheatSheetProject.Repositories.TopicRepository.UpdateNameById(firstTopic.Id, "Cheat Sheet Project");
 }
-
 firstTopic = CheatSheetProject.Repositories.TopicRepository.GetTopic(topics[0].Id);
 CheatSheetProject.Repositories.TopicRepository.UpdateNameById(firstTopic.Id, "Cheat Sheet Project");
 CheatSheetProject.Repositories.TopicRepository.DeleteTopicByName("if statement");*/
-
-var cheatSheetItem = new CheatSheetProject.Models.CheatSheetItem()
+/*var cheatSheetItem = new CheatSheetProject.Models.CheatSheetItem()
 {
     Name = "if else",
     CodeSnippet = "if (a < b) {... code} else {... some code} ",
-    AdditionalInfo = "If statements else"
-};
+    AdditionalInfo = "If statements else",
+};*/
 //CheatSheetProject.Repositories.CheatSheetItemRepository.AddNewCheatSheetItem(cheatSheetItem, "32fa4115-2d75-4cb0-8c29-3007077ff541");
 //CheatSheetProject.Repositories.CheatSheetItemRepository.UpdateItemById("013b626f-abd3-4232-a230-80862a0e047a", cheatSheetItem);
 //CheatSheetProject.Repositories.CheatSheetItemRepository.DeleteItemById("5db9a064-76d5-4823-bc08-f26f10d4b8f8");
-var item = CheatSheetProject.Repositories.CheatSheetItemRepository.GetItem("ce73c9ee-e29a-4190-99ef-14557567fd4a");
-var allItems = CheatSheetProject.Repositories.CheatSheetItemRepository.GetAllItems();
-var allItemsById = CheatSheetProject.Repositories.CheatSheetItemRepository.GetAllItemsByTopicId("32fa4115-2d75-4cb0-8c29-3007077ff541");
+//var item = CheatSheetProject.Repositories.CheatSheetItemRepository.GetItem("ce73c9ee-e29a-4190-99ef-14557567fd4a");
+//var allItems = CheatSheetProject.Repositories.CheatSheetItemRepository.GetAllItems();
+//var allItemsById = CheatSheetProject.Repositories.CheatSheetItemRepository.GetAllItemsByTopicId("32fa4115-2d75-4cb0-8c29-3007077ff541");
+
+/*var usefulLink = new CheatSheetProject.Models.UsefulLink()
+{
+    LinkAddress = "codeEasy.io",
+    LinkOrder = 1,
+    CheatSheetItemId = "013b626f-abd3-4232-a230-80862a0e047a"
+};*/
+//CheatSheetProject.Repositories.UsefulLinkRepository.AddNewUsefulLink(usefulLink, null);
+//CheatSheetProject.Repositories.UsefulLinkRepository.UpdateLinkById("82eed8c6-e9c1-4ef2-86e4-42337d3617df", usefulLink);
+//CheatSheetProject.Repositories.UsefulLinkRepository.DeleteLinkById("3bc6c371-349c-4a09-a77c-de19e3679ee9");
+//var allLinks = CheatSheetProject.Repositories.UsefulLinkRepository.GetAllLinks();
+
+//var allLinksByItemId = CheatSheetProject.Repositories.UsefulLinkRepository.GetAllUsefulLinksByItemId("013b626f-abd3-4232-a230-80862a0e047a");
+//var link = CheatSheetProject.Repositories.UsefulLinkRepository.GetLink("82eed8c6-e9c1-4ef2-86e4-42337d3617df");
+var topicWithAllData = CheatSheetProject.Repositories.TopicRepository.GetTopicWithAllItems("32fa4115-2d75-4cb0-8c29-3007077ff541");
 
 app.Run();

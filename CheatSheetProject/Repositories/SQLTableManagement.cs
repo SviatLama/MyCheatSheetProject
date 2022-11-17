@@ -10,12 +10,6 @@ namespace CheatSheetProject.Repositories
         {
         }
 
-        public static void CloseConnections(SQLiteDataReader sqlite_datareader)
-        {
-            sqlite_datareader.Close();
-            SQLTableManagement.GetSQLiteConnection().Close();
-        }
-
         public static void CreateTable(string Createsql)
         {
             SQLiteCommand sqlite_cmd = GetSQLiteConnection().CreateCommand();
@@ -32,7 +26,6 @@ namespace CheatSheetProject.Repositories
 
         public static SQLiteDataReader ReadData(string tableName, string? clause)
         {
-
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = GetSQLiteConnection().CreateCommand();
             if (clause == null)
@@ -43,23 +36,16 @@ namespace CheatSheetProject.Repositories
             {
                 sqlite_cmd.CommandText = $"SELECT * FROM {tableName} WHERE {clause}";
             }
-            
-
             return sqlite_cmd.ExecuteReader();
         }
 
-        public static SQLiteConnection GetSQLiteConnection()
+        public static SQLiteDataReader ReadCustomData(string customSelectStatement)
         {
-            if (conn == null)
-            {
-                conn = SqliteConnect.CreateConnection();
-            }
-            if(conn.State == System.Data.ConnectionState.Closed)
-            {
-                conn.Open();
-            }
-            return conn;
+            SQLiteCommand sQLiteCommand = GetSQLiteConnection().CreateCommand();
+            sQLiteCommand.CommandText = customSelectStatement;
+            return sQLiteCommand.ExecuteReader();
         }
+
 
         public static void UpdateData(string tableName, string setValues, string clause)
         {
@@ -74,5 +60,25 @@ namespace CheatSheetProject.Repositories
             sqlite_cmd.CommandText = $"DELETE from {tableName} WHERE {clause}; ";
             sqlite_cmd.ExecuteNonQuery();
         }
+
+        public static void CloseConnections(SQLiteDataReader sqlite_datareader)
+        {
+            sqlite_datareader.Close();
+            SQLTableManagement.GetSQLiteConnection().Close();
+        }
+
+        public static SQLiteConnection GetSQLiteConnection()
+        {
+            if (conn == null)
+            {
+                conn = SqliteConnect.CreateConnection();
+            }
+            if (conn.State == System.Data.ConnectionState.Closed)
+            {
+                conn.Open();
+            }
+            return conn;
+        }
+
     }
 }
