@@ -57,40 +57,45 @@ namespace CheatSheetProject.Repositories
 
         public static Topic? GetTopicWithAllItems(string id)
         {
-            var clause = $"Id = \"{id}\"";
-            var statement = "SELECT Topic.Id AS TopicId, Topic.Name, CheatSheetItem.Id AS ItemId, CheatSheetItem.Name, CheatSheetItem.CodeSnippet, CheatSheetItem.AdditionalInfo, UsefulLinks.Id AS LinkId, UsefulLinks.LinkAddress, UsefulLinks.LinkOrder \r\nFROM Topic\r\nLEFT JOIN CheatSheetItem ON Topic.Id = CheatSheetItem.TopicId\r\nLEFT JOIN UsefulLinks ON CheatSheetItem.Id = UsefulLinks.CheatSheetItemId" +
+            var statement = "SELECT Topic.Id AS TopicId, Topic.Name, CheatSheetItem.Id AS ItemId, CheatSheetItem.Name, CheatSheetItem.CodeSnippet, " +
+                "CheatSheetItem.AdditionalInfo, UsefulLinks.Id AS LinkId, UsefulLinks.LinkAddress, UsefulLinks.LinkOrder" +
+                "\r\nFROM Topic\r\nLEFT JOIN CheatSheetItem ON Topic.Id = CheatSheetItem.TopicId" +
+                "\r\nLEFT JOIN UsefulLinks ON CheatSheetItem.Id = UsefulLinks.CheatSheetItemId " +
                 $"WHERE Topic.Id = \"{id}\";";
-            Topic topic = null;
-            var cheatSheetItem = new LinkedList<CheatSheetItem>();
             var sqlite_datareader = SQLTableManagement.ReadCustomData(statement);
+            Topic topic = null;
+            var cheatSheetItems = new LinkedList<CheatSheetItem>();
+ 
             while (sqlite_datareader.Read())
             {
                 var topicId = sqlite_datareader.GetString(0);
                 var topicName = sqlite_datareader.GetString(1);
 
+
                 CheatSheetItem item = null;
                 if (sqlite_datareader[2] != DBNull.Value)
                 {
                     var itemId = sqlite_datareader.GetString(2);
-                    var itemName = sqlite_datareader.GetString(3);
-                    var itemCode = sqlite_datareader.GetString(4);
-                    var additionInfo = sqlite_datareader.GetString(5);
-                   
-                    item = new CheatSheetItem
+                    if(cheatSheetItems.Where(i => i.Id == itemId).Count() > 0)
                     {
-                        Id = itemId,
-                        Name = itemName,
-                        CodeSnippet = itemCode,
-                        AdditionalInfo = additionInfo
-                    };
-                    if (!cheatSheetItem.Contains(item))
-                    {
-                        cheatSheetItem.AddLast(item);
+                        item = cheatSheetItems.Where(i => i.Id == itemId).First();
                     }
                     else
                     {
-                        item = cheatSheetItem.Where(i => i.Id == itemId).FirstOrDefault();
+                        var itemName = sqlite_datareader.GetString(3);
+                        var itemCode = sqlite_datareader.GetString(4);
+                        var additionInfo = sqlite_datareader.GetString(5);
+
+                        item = new CheatSheetItem
+                        {
+                            Id = itemId,
+                            Name = itemName,
+                            CodeSnippet = itemCode,
+                            AdditionalInfo = additionInfo
+                        };
+                        cheatSheetItems.AddLast(item);
                     }
+
 
                     UsefulLink link = null;
                     if (sqlite_datareader[6] != DBNull.Value)
@@ -109,7 +114,7 @@ namespace CheatSheetProject.Repositories
                     }
                 }
 
-                if(topic == null)
+                if (topic == null)
                 {
                     topic = new Topic
                     {
