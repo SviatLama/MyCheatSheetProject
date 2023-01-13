@@ -37,8 +37,6 @@ namespace CheatSheetProject.Repositories
             SQLTableManagement.UpdateData(usefulLinksTable, setClause, whereClause);
         }
 
-
-
         public static List<UsefulLink> GetAllLinks()
         {
             var allUsefulLinks = new List<UsefulLink>();
@@ -91,7 +89,7 @@ namespace CheatSheetProject.Repositories
         {
             var linksByItem = new List<UsefulLink>();
             var clause = $"CheatSheetItemId = \"{cheatSheetItemID}\"";
-            var sqlite_datareader = SQLTableManagement.ReadData(usefulLinksTable, null);
+            var sqlite_datareader = SQLTableManagement.ReadData(usefulLinksTable, clause);
             while (sqlite_datareader.Read())
             {
                 string id = sqlite_datareader.GetString(0);
@@ -108,6 +106,12 @@ namespace CheatSheetProject.Repositories
             }
             SQLTableManagement.CloseConnections(sqlite_datareader);
             return linksByItem;
+        }
+
+        public static void DeleteByItemId(string cheatSheetItemId)
+        {
+            var clause = $"CheatSheetItemId = \"{cheatSheetItemId}\"";
+            SQLTableManagement.DeleteData(usefulLinksTable, clause);
         }
 
 

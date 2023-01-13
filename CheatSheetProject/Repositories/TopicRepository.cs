@@ -39,7 +39,7 @@ namespace CheatSheetProject.Repositories
         {
             SQLTableManagement.GetSQLiteConnection();
             var clause = $"Id = \"{id}\"";
-            var sqlite_datareader = SQLTableManagement.ReadData(topic, null);
+            var sqlite_datareader = SQLTableManagement.ReadData(topic, clause);
             while (sqlite_datareader.Read())
             {
                 string name = sqlite_datareader.GetString(1);

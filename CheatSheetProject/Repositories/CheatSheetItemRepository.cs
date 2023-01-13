@@ -10,7 +10,16 @@ namespace CheatSheetProject.Repositories
         private static readonly string cheatSheetItemTable = "CheatSheetItem";
         public static void AddNewCheatSheetItem(CheatSheetItem cheatSheetItem, string? TopicId)
         {
-            var id = Guid.NewGuid();
+            string id;
+            if(cheatSheetItem.Id == null)
+            {
+                id = Guid.NewGuid().ToString();
+            }
+            else
+            {
+                id = cheatSheetItem.Id;
+            }
+            
             SQLTableManagement.InsertData(cheatSheetItemTable, "Id, Name, CodeSnippet, AdditionalInfo, TopicId", 
                 $"\"{id}\",\"{cheatSheetItem.Name}\",\"{cheatSheetItem.CodeSnippet}\",\"{cheatSheetItem.AdditionalInfo}\", \"{TopicId}\"");
         }
@@ -45,7 +54,7 @@ namespace CheatSheetProject.Repositories
                 string id = sqlite_datareader.GetString(0);
                 string name = sqlite_datareader.GetString(1);
                 string codeSnippet = sqlite_datareader.GetString(2);
-                string additionalInfo = sqlite_datareader.GetString(4);
+                string additionalInfo = sqlite_datareader.GetString(3);
                 allCheatSheetItems.Add(new CheatSheetItem 
                 {
                     Id = id,
@@ -64,12 +73,12 @@ namespace CheatSheetProject.Repositories
             SQLTableManagement.GetSQLiteConnection();
             var clause = $"Id = \"{id}\"";
 
-            var sqlite_datareader = SQLTableManagement.ReadData(cheatSheetItemTable, null);
+            var sqlite_datareader = SQLTableManagement.ReadData(cheatSheetItemTable, clause);
             while (sqlite_datareader.Read())
             {
                 string name = sqlite_datareader.GetString(1);
                 string codeSnippet = sqlite_datareader.GetString(2);
-                string additionalInfo = sqlite_datareader.GetString(4);
+                string additionalInfo = sqlite_datareader.GetString(3);
 
                 SQLTableManagement.CloseConnections(sqlite_datareader);
                 return new CheatSheetItem
@@ -94,7 +103,7 @@ namespace CheatSheetProject.Repositories
                 string id = sqlite_datareader.GetString(0);
                 string name = sqlite_datareader.GetString(1);
                 string codeSnippet = sqlite_datareader.GetString(2);
-                string additionalInfo = sqlite_datareader.GetString(4);
+                string additionalInfo = sqlite_datareader.GetString(3);
                 allCheatSheetItemsForTopic.Add(new CheatSheetItem
                 {
                     Id = id,
